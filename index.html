@@ -560,7 +560,8 @@
       <p class="hero-sub">Accès confidentiel. Demandes examinées individuellement.</p>
       <div class="hero-buttons">
         <a href="#demande" class="btn btn-primary">Faire une demande</a>
-        <a href="#portail" class="btn btn-secondary">J’ai reçu un code</a>
+        <!-- Lien modifié : pointe vers l'id du panneau de code -->
+        <a href="#code-panel" class="btn btn-secondary">J’ai reçu un code</a>
       </div>
     </section>
 
@@ -598,12 +599,13 @@
       <p class="small muted" style="margin-top: 1rem;">Les modalités et tarifs sont accessibles après validation d’accès.</p>
     </section>
 
-    <!-- Portail d'accès -->
+    <!-- Portail d'accès : ordre original (demande en premier, code en second) -->
     <section id="portail" class="section">
       <div class="eyebrow">Cercle privé</div>
       <h2>Accès complet sur demande</h2>
       
-      <div class="access-grid" style="margin-top: 1.5rem;">
+      <div class="access-grid">
+        <!-- Panneau "Faire une demande" (premier) -->
         <div class="panel">
           <div class="inner">
             <h3>Faire une demande</h3>
@@ -616,7 +618,8 @@
           </div>
         </div>
 
-        <div class="panel">
+        <!-- Panneau "Entrer votre code privilège" (second) avec id pour ancrage -->
+        <div class="panel" id="code-panel">
           <div class="inner">
             <h3>Entrer votre code privilège</h3>
             <p class="muted small">Votre demande a été acceptée, veuillez saisir ci-dessous votre code d'accès personnel.</p>
@@ -653,7 +656,7 @@
           <div class="price">55 €</div>
           <p class="pricing-copy small">Un premier temps consacré à l’éclairage d’une situation ou d’une interrogation précise.</p>
           <div class="buy-row">
-            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/IlojaZen/55" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/55" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
           </div>
         </article>
 
@@ -665,7 +668,7 @@
           <div class="price">110 €</div>
           <p class="pricing-copy small">Un temps plus ample permettant d’explorer les différentes dimensions d’une situation.</p>
           <div class="buy-row">
-            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/IlojaZen/110" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/110" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
           </div>
         </article>
 
@@ -677,7 +680,7 @@
           <div class="price">165 €</div>
           <p class="pricing-copy small">Une exploration complète consacrée aux situations nécessitant un temps étendu.</p>
           <div class="buy-row">
-            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/IlojaZen/165" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/165" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
           </div>
         </article>
 
@@ -689,7 +692,7 @@
           <div class="price">150 €</div>
           <p class="pricing-copy small">Trois rencontres permettant d’observer l’évolution d’une situation dans le temps.</p>
           <div class="buy-row">
-            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/IlojaZen/150" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/150" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
           </div>
         </article>
       </div>
@@ -725,8 +728,8 @@
                 <input id="referral" name="referral" type="text" placeholder="Prénom ou indication">
               </div>
             </div>
-            <!-- Nouvelle ligne pour le téléphone obligatoire -->
-            <div class="form-row" style="grid-template-columns: 1fr;"> <!-- une seule colonne -->
+            <!-- Ligne pour le téléphone obligatoire -->
+            <div class="form-row" style="grid-template-columns: 1fr;">
               <div class="form-group">
                 <label for="phone">Téléphone (format : 0X XX XX XX)</label>
                 <input id="phone" name="phone" type="tel" 
@@ -834,7 +837,6 @@
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Simple validation : le navigateur vérifie déjà le pattern et required
         formStatus.className = 'status success ritual';
         formStatus.innerHTML = `
           <span class="status-line">Votre demande a été transmise.</span>
