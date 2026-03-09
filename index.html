@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cabinet privé — guidance symbolique</title>
+  <meta name="description" content="Cabinet privé — accès confidentiel sur demande ou via code transmis.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-soft: rgba(15, 15, 15, 0.72);
+      --panel: rgba(20, 18, 16, 0.72);
+      --text: #ece8e0;
+      --muted: #aaa095;
+      --muted-2: #c0b8a8;
+      --gold: #b89e7a;
+      --gold-2: #d4b48c;
+      --line: rgba(180, 150, 110, 0.22);
+      --line-strong: rgba(180, 150, 110, 0.48);
+      --success: #d4b48c;
+      --error: #d8b5b5;
+      --radius: 24px;
+      --radius-sm: 16px;
+      --shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.7);
+      --shadow-strong: 0 30px 50px -20px rgba(0, 0, 0, 0.85);
+      --max: 1200px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(70, 50, 30, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(100, 80, 50, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0c0c0c 0%, #1a1814 100%);
+      background-size: 200% 200%, 200% 200%, auto;
+      animation: breathe 20s ease-in-out infinite alternate;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.08"/></svg>');
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: -1;
+      animation: grainMove 8s infinite linear;
+    }
+
+    @keyframes breathe {
+      0% { background-position: 0% 0%, 0% 0%, 0 0; }
+      50% { background-position: 15% 10%, 85% 70%, 0 0; }
+      100% { background-position: 5% 5%, 95% 80%, 0 0; }
+    }
+
+    @keyframes grainMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(10%, 10%); }
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.7rem, 8vw, 4.8rem);
+      font-weight: 300;
+      line-height: 1.08;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1.4s ease-out forwards;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      margin-bottom: 1.25rem;
+      font-weight: 400;
+      border-bottom: 1px solid rgba(180, 150, 110, 0.3);
+      display: inline-block;
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section {
+      margin: 6rem 0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+    }
+
+    .hero-sub {
+      font-size: 1.18rem;
+      color: var(--muted-2);
+      max-width: 44rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1.4s 0.2s ease-out forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 1.4s 0.4s ease-out forwards;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.28rem 0.8rem;
+      border: 1px solid rgba(180, 150, 110, 0.35);
+      border-radius: 999px;
+      color: var(--muted-2);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .glow-line {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1rem 0 1.2rem;
+    }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 0.92rem; }
+    .hidden { display: none !important; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--gold);
+      padding: 0.95rem 2rem;
+      min-height: 3.2rem;
+      font-size: 0.88rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 -100%;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, rgba(180, 150, 110, 0.18), transparent);
+      transition: left 0.6s;
+      z-index: -1;
+    }
+
+    .btn:hover {
+      border-color: var(--gold-2);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px -8px rgba(180, 150, 110, 0.3);
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: rgba(180, 150, 110, 0.08);
+    }
+
+    .btn-secondary {
+      border-color: rgba(180, 150, 110, 0.4);
+      color: var(--muted-2);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .cards-grid,
+    .offers-grid,
+    .access-grid,
+    .pricing-grid,
+    .form-row {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .offers-grid { grid-template-columns: repeat(4, 1fr); }
+    .access-grid { grid-template-columns: 1.15fr 1fr; }
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: repeat(2, 1fr); }
+
+    .card,
+    .panel,
+    .contact-form {
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      padding: 2rem 1.8rem;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(180,150,110,0.1), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(180,150,110,0.08), transparent);
+      transform: rotate(30deg) translateX(-100%);
+      transition: transform 0.8s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow-strong), 0 0 0 1px rgba(180,150,110,0.2) inset;
+    }
+
+    .card:hover::after { opacity: 1; }
+    .card:hover::before { transform: rotate(30deg) translateX(100%); }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.2rem 0.8rem;
+      margin-bottom: 1.2rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .card:hover .badge {
+      border-color: var(--gold-2);
+      background: rgba(180, 150, 110, 0.1);
+    }
+
+    .duration {
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .price {
+      font-size: 1.35rem;
+      color: var(--gold-2);
+      margin: 1rem 0;
+    }
+
+    .buy-row {
+      margin-top: 1.2rem;
+    }
+
+    .card.locked {
+      filter: blur(3px) grayscale(0.7);
+      opacity: 0.5;
+      transition: filter 0.7s ease, opacity 0.7s ease;
+    }
+
+    .card.locked .price,
+    .card.locked .buy-row,
+    .card.locked .whatsapp-note,
+    .card.locked .pricing-copy {
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0;
+      overflow: hidden;
+    }
+
+    .card.revealed {
+      filter: none;
+      opacity: 1;
+    }
+
+    .panel,
+    .contact-form {
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      transition: box-shadow 0.4s, border-color 0.4s;
+    }
+
+    .panel:hover,
+    .contact-form:hover {
+      box-shadow: var(--shadow-strong), 0 0 0 1px rgba(180,150,110,0.2);
+      border-color: rgba(180,150,110,0.5);
+    }
+
+    .panel .inner,
+    .contact-form .inner {
+      padding: 1.5rem;
+      height: 100%;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #333;
+      padding: 1rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(180,150,110,0.1);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .status {
+      min-height: 1.5rem;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--muted-2);
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: var(--error); }
+
+    .status.ritual {
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(180,150,110,0.22);
+      background: linear-gradient(180deg, rgba(180,150,110,0.06), rgba(255,255,255,0.02));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 12px 30px -18px rgba(180,150,110,0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status.ritual::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212,180,140,0.16), transparent);
+      transform: skewX(-18deg);
+      animation: ritualSweep 1.8s ease forwards;
+      pointer-events: none;
+    }
+
+    .status-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: ritualLine 700ms ease forwards;
+    }
+
+    .status-line + .status-line {
+      margin-top: 0.6rem;
+    }
+
+    .status-line:nth-child(1) { animation-delay: 120ms; }
+    .status-line:nth-child(2) { animation-delay: 420ms; }
+    .status-line:nth-child(3) { animation-delay: 760ms; }
+
+    @keyframes ritualLine {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes ritualSweep {
+      from { left: -120%; opacity: 0; }
+      20% { opacity: 1; }
+      to { left: 160%; opacity: 0; }
+    }
+
+    .pricing-card {
+      filter: blur(10px);
+      opacity: 0.4;
+      transition: 1.4s ease;
+    }
+
+    .pricing-card.revealed {
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    .rarity {
+      text-align: center;
+      font-style: italic;
+      max-width: 48rem;
+      margin: 1.5rem auto 2rem;
+      color: var(--muted-2);
+      border-top: 1px solid var(--line);
+      padding-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      margin: 6rem 0 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(180,150,110,0.2);
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    @media (max-width: 980px) {
+      .offers-grid,
+      .pricing-grid,
+      .access-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .section { margin: 4rem 0; }
+      .offers-grid,
+      .pricing-grid,
+      .access-grid,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .actions,
+      .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero section visible">
+      <h1>Cabinet privé<br>de guidance symbolique</h1>
+      <p class="hero-sub">Accès confidentiel. Demandes examinées individuellement.</p>
+      <div class="hero-buttons">
+        <a href="#demande" class="btn btn-primary">Faire une demande</a>
+        <a href="#portail" class="btn btn-secondary">J’ai reçu un code</a>
+      </div>
+    </section>
+
+    <!-- Section des accompagnements (teasers) -->
+    <section class="section">
+      <div class="eyebrow">Nos accompagnements</div>
+      <h2>Un regard extérieur...</h2>
+      <p class="muted" style="max-width:620px;margin-top:0.8rem;">Certaines réponses émergent lorsque l’on observe une situation sous un autre angle, avec un regard extérieur capable d’en révéler les dynamiques invisibles.</p>
+      <div class="offers-grid" style="margin-top: 1.6rem;">
+        <article class="card locked offer-teaser">
+          <span class="badge">Tirage</span>
+          <h3>L’Ouverture</h3>
+          <p class="duration">45 minutes</p>
+          <p class="small muted">Un premier temps consacré à l’éclairage d’une situation ou d’une interrogation précise.</p>
+        </article>
+        <article class="card locked offer-teaser">
+          <span class="badge">Tirage</span>
+          <h3>L’Approfondissement</h3>
+          <p class="duration">1h30</p>
+          <p class="small muted">Un temps plus ample permettant d’explorer les différentes dimensions d’une situation.</p>
+        </article>
+        <article class="card locked offer-teaser">
+          <span class="badge">Tirage</span>
+          <h3>La Traversée</h3>
+          <p class="duration">2h15</p>
+          <p class="small muted">Une exploration complète consacrée aux situations nécessitant un temps étendu.</p>
+        </article>
+        <article class="card locked offer-teaser">
+          <span class="badge">Cycle</span>
+          <h3>Le Parcours</h3>
+          <p class="duration">3 rencontres sur 3 mois</p>
+          <p class="small muted">Trois rencontres permettant d’observer l’évolution d’une situation dans le temps.</p>
+        </article>
+      </div>
+      <p class="small muted" style="margin-top: 1rem;">Les modalités et tarifs sont accessibles après validation d’accès.</p>
+    </section>
+
+    <!-- Portail d'accès -->
+    <section id="portail" class="section">
+      <div class="eyebrow">Cercle privé</div>
+      <h2>Accès complet sur demande</h2>
+      
+      <div class="access-grid" style="margin-top: 1.5rem;">
+        <div class="panel">
+          <div class="inner">
+            <h3>Faire une demande</h3>
+            <p class="muted small">
+              Votre demande sera étudiée et pourra donner lieu à l'envoi d'un code d'accès privilège sous 24 heures si elle est acceptée. Un refus motivé sera transmis le cas échéant si votre demande ne relève pas du périmètre des accompagnements proposés.
+            </p>
+            <div class="actions" style="margin-top: 1.25rem;">
+              <a href="#demande" class="btn btn-primary">Transmettre</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="inner">
+            <h3>Entrer votre code privilège</h3>
+            <p class="muted small">Votre demande a été acceptée, veuillez saisir ci-dessous votre code d'accès personnel.</p>
+            <div style="margin-top: 1.25rem;">
+              <label for="access-code">Code d’accès</label>
+              <input id="access-code" type="text" placeholder="Entrer votre code d’accès" autocomplete="off">
+              <div class="actions" style="margin-top: 0.9rem;">
+                <button id="validate-code" type="button" class="btn btn-secondary">Valider</button>
+              </div>
+              <div id="code-status" class="status" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section des prestations détaillées (cachée initialement) -->
+    <section id="prestations" class="section hidden">
+      <div class="eyebrow">Accès reconnu</div>
+      <h2>Nos accompagnements</h2>
+      <p class="muted" style="max-width: 54rem;">
+        Une fois le règlement confirmé, le numéro WhatsApp et l’horaire de votre accompagnement seront communiqués par mail.
+      </p>
+      <p class="rarity">
+        Le nombre de consultations proposées chaque mois est volontairement limité
+        afin de préserver la qualité des échanges.
+      </p>
+      <div class="pricing-grid" style="margin-top: 1.6rem;">
+        <!-- Carte 1 : L'Ouverture -->
+        <article class="card pricing-card">
+          <span class="badge">Ouverture</span>
+          <h3>L’Ouverture</h3>
+          <p class="duration">45 minutes</p>
+          <div class="price">55 €</div>
+          <p class="pricing-copy small">Un premier temps consacré à l’éclairage d’une situation ou d’une interrogation précise.</p>
+          <div class="buy-row">
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/55" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+          </div>
+        </article>
+
+        <!-- Carte 2 : L'Approfondissement -->
+        <article class="card pricing-card">
+          <span class="badge">Approfondissement</span>
+          <h3>L’Approfondissement</h3>
+          <p class="duration">1h30</p>
+          <div class="price">110 €</div>
+          <p class="pricing-copy small">Un temps plus ample permettant d’explorer les différentes dimensions d’une situation.</p>
+          <div class="buy-row">
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/110" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+          </div>
+        </article>
+
+        <!-- Carte 3 : La Traversée -->
+        <article class="card pricing-card">
+          <span class="badge">Traversée</span>
+          <h3>La Traversée</h3>
+          <p class="duration">2h15</p>
+          <div class="price">165 €</div>
+          <p class="pricing-copy small">Une exploration complète consacrée aux situations nécessitant un temps étendu.</p>
+          <div class="buy-row">
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/165" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+          </div>
+        </article>
+
+        <!-- Carte 4 : Le Parcours -->
+        <article class="card pricing-card">
+          <span class="badge">Parcours</span>
+          <h3>Le Parcours</h3>
+          <p class="duration">3 × 45 min sur 3 mois</p>
+          <div class="price">150 €</div>
+          <p class="pricing-copy small">Trois rencontres permettant d’observer l’évolution d’une situation dans le temps.</p>
+          <div class="buy-row">
+            <a class="btn btn-primary" href="https://www.paypal.com/paypalme/votrecompte/150" target="_blank" rel="noopener noreferrer">Confirmer la séance</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Formulaire de demande avec téléphone obligatoire -->
+    <section id="demande" class="section">
+      <div class="eyebrow">Demande</div>
+      <h2>Transmettre votre demande</h2>
+      <p class="muted" style="max-width: 48rem;">
+        Votre demande sera étudiée avec attention. Si elle est retenue, un code d’accès privilège personnel vous sera adressé sous 24 heures afin de rejoindre l’espace réservé. Si elle ne relève pas du périmètre des accompagnements proposés, un refus motivé vous sera transmis.
+      </p>
+      <div class="contact-form" style="margin-top: 1.6rem;">
+        <div class="inner">
+          <form id="contact" action="#" method="post">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">Prénom</label>
+                <input id="first-name" name="first-name" type="text" placeholder="Votre prénom" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="Votre email" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="subject">Objet de la demande</label>
+                <input id="subject" name="subject" type="text" placeholder="Situation, période, question" required>
+              </div>
+              <div class="form-group">
+                <label for="referral">Personne vous ayant transmis l’accès (optionnel)</label>
+                <input id="referral" name="referral" type="text" placeholder="Prénom ou indication">
+              </div>
+            </div>
+            <!-- Nouvelle ligne pour le téléphone obligatoire -->
+            <div class="form-row" style="grid-template-columns: 1fr;"> <!-- une seule colonne -->
+              <div class="form-group">
+                <label for="phone">Téléphone (format : 0X XX XX XX)</label>
+                <input id="phone" name="phone" type="tel" 
+                       placeholder="06 12 34 56 78" 
+                       pattern="^0\d(?:\s?\d{2}){4}$" 
+                       title="Veuillez saisir un numéro français à 10 chiffres, avec ou sans espaces (ex: 0612345678 ou 06 12 34 56 78)"
+                       required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Présentez brièvement votre demande." required></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="btn btn-primary">Transmettre</button>
+            </div>
+            <div id="form-status" class="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p style="margin:0;line-height:1.15;">Cabinet privé — Échanges confidentiels</p>
+      <p style="margin:0;line-height:1.15;">@1975-2026 - hoasen academie</p>
+      <p class="small muted" style="margin:0;line-height:1.15;">Aucune donnée collectée sans votre accord.</p>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const validCodes = ['AURORA', 'INITIA', 'ARCANA', 'OBSIDIAN'];
+      const validateButton = document.getElementById('validate-code');
+      const codeInput = document.getElementById('access-code');
+      const codeStatus = document.getElementById('code-status');
+      const pricingSection = document.getElementById('prestations');
+      const offerTeasers = document.querySelectorAll('.offer-teaser');
+      const form = document.getElementById('contact');
+      const formStatus = document.getElementById('form-status');
+      const accessKey = 'accessGranted';
+
+      const showPricing = () => {
+        pricingSection.classList.remove('hidden');
+        offerTeasers.forEach(card => {
+          card.classList.remove('locked');
+          card.classList.add('revealed');
+        });
+        document.body.classList.add('access-granted');
+        setTimeout(() => {
+          document.querySelectorAll('.pricing-card').forEach(card => {
+            card.classList.add('revealed');
+          });
+        }, 800);
+      };
+
+      const unlockPricing = () => {
+        showPricing();
+        sessionStorage.setItem(accessKey, 'true');
+        codeStatus.textContent = 'Accès reconnu. Les modalités réservées sont désormais consultables.';
+        codeStatus.className = 'status success';
+        setTimeout(() => {
+          pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 180);
+      };
+
+      const rejectCode = () => {
+        sessionStorage.removeItem(accessKey);
+        codeStatus.textContent = 'Ce code ne permet pas l’accès demandé à ce stade.';
+        codeStatus.className = 'status error';
+      };
+
+      const checkCode = () => {
+        const value = codeInput.value.trim().toUpperCase();
+        if (!value) {
+          codeStatus.textContent = 'Veuillez saisir le code transmis.';
+          codeStatus.className = 'status';
+          return;
+        }
+        if (validCodes.includes(value)) {
+          unlockPricing();
+        } else {
+          rejectCode();
+        }
+      };
+
+      validateButton.addEventListener('click', checkCode);
+      codeInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          checkCode();
+        }
+      });
+
+      const sections = document.querySelectorAll('.section:not(.hero)');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+
+      sections.forEach(section => observer.observe(section));
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Simple validation : le navigateur vérifie déjà le pattern et required
+        formStatus.className = 'status success ritual';
+        formStatus.innerHTML = `
+          <span class="status-line">Votre demande a été transmise.</span>
+          <span class="status-line">Chaque demande est étudiée individuellement.</span>
+          <span class="status-line">Si votre situation relève du périmètre des accompagnements proposés, un code d’accès personnel pourra vous être transmis sous 24 heures.</span>
+        `;
+        form.reset();
+      });
+
+      if (sessionStorage.getItem(accessKey) === 'true') {
+        showPricing();
+        codeStatus.textContent = 'Accès déjà reconnu sur cette session.';
+        codeStatus.className = 'status success';
+      }
+    })();
+  </script>
+</body>
+</html>
