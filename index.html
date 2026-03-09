@@ -560,7 +560,6 @@
       <p class="hero-sub">Accès confidentiel. Demandes examinées individuellement.</p>
       <div class="hero-buttons">
         <a href="#demande" class="btn btn-primary">Faire une demande</a>
-        <!-- Lien modifié : pointe vers l'id du panneau de code -->
         <a href="#code-panel" class="btn btn-secondary">J’ai reçu un code</a>
       </div>
     </section>
@@ -698,7 +697,7 @@
       </div>
     </section>
 
-    <!-- Formulaire de demande avec téléphone obligatoire -->
+    <!-- Formulaire de demande avec téléphone obligatoire et Netlify Forms -->
     <section id="demande" class="section">
       <div class="eyebrow">Demande</div>
       <h2>Transmettre votre demande</h2>
@@ -707,7 +706,9 @@
       </p>
       <div class="contact-form" style="margin-top: 1.6rem;">
         <div class="inner">
-          <form id="contact" action="#" method="post">
+          <!-- Ajout de l'attribut netlify et du champ caché form-name -->
+          <form id="contact" name="demande" method="POST" netlify data-netlify="true">
+            <input type="hidden" name="form-name" value="demande">
             <div class="form-row">
               <div class="form-group">
                 <label for="first-name">Prénom</label>
@@ -835,16 +836,38 @@
 
       sections.forEach(section => observer.observe(section));
 
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        formStatus.className = 'status success ritual';
-        formStatus.innerHTML = `
-          <span class="status-line">Votre demande a été transmise.</span>
-          <span class="status-line">Chaque demande est étudiée individuellement.</span>
-          <span class="status-line">Si votre situation relève du périmètre des accompagnements proposés, un code d’accès personnel pourra vous être transmis sous 24 heures.</span>
-        `;
-        form.reset();
-      });
+      // Gestionnaire de formulaire compatible Netlify (AJAX)
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault(); // On empêche la soumission classique
+
+          const formData = new FormData(form);
+
+          fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+          })
+          .then(response => {
+            if (response.ok) {
+              formStatus.className = 'status success ritual';
+              formStatus.innerHTML = `
+                <span class="status-line">Votre demande a été transmise.</span>
+                <span class="status-line">Chaque demande est étudiée individuellement.</span>
+                <span class="status-line">Si votre situation relève du périmètre des accompagnements proposés, un code d’accès personnel pourra vous être transmis sous 24 heures.</span>
+              `;
+              form.reset();
+            } else {
+              formStatus.className = 'status error';
+              formStatus.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+            }
+          })
+          .catch(error => {
+            formStatus.className = 'status error';
+            formStatus.textContent = 'Problème de connexion. Merci de réessayer.';
+          });
+        });
+      }
 
       if (sessionStorage.getItem(accessKey) === 'true') {
         showPricing();
